@@ -1,7 +1,9 @@
-import {cart} from "./scripts/cart.js"
-import {getData} from "./scripts/loadData.js";
+import { initDom } from './scripts/dom.js';
+import { client } from './scripts/client.js';
+
 (() => {
-    console.log("init");
-    const data = getData();
+    console.log('hello');
+    client.device.setDevice();
+    initDom();
 
 })();

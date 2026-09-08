@@ -1,18 +1,18 @@
-const client = {
+export const client = {
     device: {
         type: null,
         getDevice(){
-            const width = window.innerWidth;
-            if (width < 768) {
-                return 'mobile';
-            } else if (width >= 768 && width < 1024) {
-                return 'tablet';
-            } else {
-                return 'desktop';
-            }
+            return this.type;
         },
         setDevice(){
-            client.device.type = this.getDevice();
+            const width = window.innerWidth;
+            if (width < 768) {
+                this.type  = 'mobile';
+            } else if (width >= 768 && width < 1024) {
+                this.type = 'tablet';
+            } else {
+                this.type = 'desktop';
+            }
         }
     }
 }

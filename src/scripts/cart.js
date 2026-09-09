@@ -4,14 +4,13 @@ export const cart= {
 
     addItem(item){
         const exists = this.items.find(it => it.name === item.name);
-        exists === undefined ? this.items.push({name: item.name, price: item.price, quantity: 1,}) : exists.quantity++;
-        console.log("added: ", { name: item.name, price: item.price });
+        console.log(item);
+        exists === undefined ? this.items.push({name: item.name, price: item.price, quantity: 1, image: item.image}) : exists.quantity++;
         this.total = this.setTotal();
         },
     removeItem(item){
         const exists = this.items.find(it => it.name === item.name);
         exists === undefined ? console.error('ERROR: Item not found in cart.') : exists.quantity--;
-        console.log("removed: ", { name: item.name, price: item.price });
         this.total = this.setTotal();
     },
     setTotal(){
@@ -22,5 +21,10 @@ export const cart= {
     },
     getCartList(){
         return this.items;
+    },
+    emptyCart(){
+        cart.items = [];
+        cart.total = 0;
+        console.log(cart);
     }
 }

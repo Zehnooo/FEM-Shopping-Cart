@@ -5,4 +5,7 @@ export class Item {
         this.price = price;
         this.image = image;
     }
+    getTotal(qty){
+        return (this.price * qty);
+    }
 }

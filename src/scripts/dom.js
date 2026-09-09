@@ -59,13 +59,15 @@ const cartList = () => {
     const con = newEl('div', null, 'cart-list-con', []);
     const listCon = newEl('div', null,  'cart-list', []);
 
+    const total = newEl('h3', `$${cart.getTotal().toFixed(2)}`, 'cart-total',[]);
+
     const resetBtn = newEl('button', 'Empty Cart', 'empty-cart', ['btn']);
     resetBtn.addEventListener('click', () => {
         cart.emptyCart();
         updateCartList();
     });
 
-    con.append(listCon, resetBtn);
+    con.append(listCon, total, resetBtn);
     return con;
 }
 
@@ -73,13 +75,13 @@ const cartItem = (item) => {
     const con = newEl('div');
 
     const fig = newEl('figure');
-    const img = newEl('img');
+    const img = newEl('img', null, null, ['img', 'thumbnail']);
     img.src = item.image.thumbnail;
 
     const name = newEl('h3', item.name);
     const price = newEl('p', `@$${item.price.toFixed(2)}`);
     const qty = newEl('p', `${item.quantity}`);
-    const total = newEl('p', `$${(item.price * item.quantity).toFixed(2)}`);
+    const total = newEl('p', `$${(item.getTotal(item.quantity)).toFixed(2)}`);
 
     fig.append(img);
     con.append(img, name, price, qty, total)
@@ -94,4 +96,10 @@ const updateCartList = () =>  {
 
     list.replaceChildren();
     items.forEach(item => list.append(cartItem(item)));
+    updateCartTotal();
+}
+
+const updateCartTotal = () => {
+    console.log(cart.getTotal());
+    document.querySelector('#cart-total').textContent = `$${cart.getTotal().toFixed(2)}`;
 }

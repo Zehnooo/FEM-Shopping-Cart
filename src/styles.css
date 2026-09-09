@@ -1,0 +1,41 @@
+
+body, html, #root {
+    width: 100%;
+    height: 100%;
+}
+
+#root {
+    max-width: 1440px;
+}
+
+.grid {
+    display: grid;
+}
+
+#home-grid {
+    grid-template-columns: 3fr 1fr;
+    position: absolute;
+    width: 100%;
+    place-items: center;
+}
+
+#home-grid #item-grid {
+    grid-column: 1 / 2;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+#home-grid #cart-list-con  {
+    grid-column: 2 / 3;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+}
+
+.item-card .img-con {
+    max-width: 250px;
+}
+
+.item-card .img-con img {
+    width: 100%;
+    height: 100%;
+}

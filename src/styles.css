@@ -1,11 +1,19 @@
 
-body, html, #root {
-    width: 100%;
-    height: 100%;
+body, html {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
 }
 
 #root {
+    width: auto;
+    height: auto;
     max-width: 1440px;
+}
+
+.no-display {
+    display: none;
+    opacity: 0;
 }
 
 .grid {
@@ -17,18 +25,41 @@ body, html, #root {
     position: absolute;
     width: 100%;
     place-items: center;
+    overflow: hidden;
+    padding: .8rem;
 }
 
-#home-grid #item-grid {
+#home-grid #dessert-con {
     grid-column: 1 / 2;
+}
+
+#dessert-con #item-grid {
     grid-template-columns: repeat(3, 1fr);
+    overflow-y: scroll;
+    padding: .8rem;
+    max-height: 1000px;
 }
 
 #home-grid #cart-list-con  {
+    display: flex;
+    flex-direction: column;
     grid-column: 2 / 3;
     position: sticky;
     top: 0;
-    align-self: flex-start;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding: .8rem;
+}
+
+#home-grid #cart-list-con #cart-list {
+    overflow-y: scroll;
+    max-height: 1000px;
+    padding: .8rem;
+}
+
+#home-grid #cart-list-con #cart-bottom {
+    margin-top: auto;
 }
 
 .item-card .img-con {
@@ -38,4 +69,28 @@ body, html, #root {
 .item-card .img-con img {
     width: 100%;
     height: 100%;
+}
+
+#toast-con {
+    position: fixed;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    background: #ccc;
+    padding: 12px 24px;
+    border-radius: 8px;
+
+}
+
+#toast-con.empty {
+    opacity: 0;
+}
+
+.toast.error {
+    color: red;
+}
+
+.toast.success {
+    color: green;
 }

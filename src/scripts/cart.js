@@ -46,6 +46,7 @@ export const cart= {
         return cart.items;
     },
     emptyCart(){
+        if (!cart.items.length) return { success: false, msg: 'Cart is already empty' }
         cart.items.forEach(item => item.quantity = 0);
         cart.items = [];
         cart.setTotal();
@@ -57,7 +58,7 @@ export const cart= {
             total: cart.getTotal(),
         }
         if (!order.items.length || order.total === 0) {
-            return { success: false, msg: 'Cart is empty. Please add at least one item.'}
+            return { success: false, msg: 'Cart is empty, please add at least one item'}
         }
         return { success: true, msg: 'Order confirmed!', order }
     }

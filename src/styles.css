@@ -1,8 +1,20 @@
+:root {
+    --red: hsl(14, 86%, 42%);
+    --green: hsl(159, 69%, 38%);
+    --rose-50: hsl(20, 50%, 98%);
+    --rose-100: hsl(13, 31%, 94%);
+    --rose-300: hsl(14, 25%, 72%);
+    --rose-400: hsl(7, 20%, 60%);
+    --rose-500: hsl(12, 20%, 44%);
+    --rose-900: hsl(14, 65%, 9%);
+    --main-font: "Red Hat Text", sans-serif;
+}
 
 body, html {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    font-family: var(--main-font);
 }
 
 #root {
@@ -12,7 +24,7 @@ body, html {
 }
 
 .no-display {
-    display: none;
+    display: none !important;
     opacity: 0;
 }
 
@@ -64,11 +76,54 @@ body, html {
 
 .item-card .img-con {
     max-width: 250px;
+    margin: 0;
 }
 
 .item-card .img-con img {
     width: 100%;
     height: 100%;
+    display: block;
+}
+
+.item-card .card-top {
+    position: relative;
+}
+
+.item-card .card-btns {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    display: flex;
+    width: 75%;
+    border-radius: .8rem;
+}
+
+.item-card .card-btns.multi {
+    background: var(--red);
+    justify-content: space-evenly;
+}
+
+.btn {
+    border: 1px solid #ccc;
+    align-items: center;
+    display: inline-flex;
+    padding: .4rem .6rem;
+    background: transparent;
+
+}
+
+.btn.small {
+    border-radius: 50%;
+}
+
+#cart-increment.single {
+    background: white;
+    width: 75%;
+    border-radius: 1rem;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
 }
 
 #order-confirmation-modal {

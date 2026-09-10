@@ -29,9 +29,9 @@ const itemCard = (item) => {
     const card = newEl('div', null, `${item.name}`, ['item-card']);
 
     const con = newEl('div', null, '', []);
-    const topCon = newEl('div', null, '', []);
-    const botCon = newEl('div', null, '', []);
-    const btnCon =  newEl('div', null, 'btn-con', []);
+    const topCon = newEl('div', null, '', ['card-top']);
+    const botCon = newEl('div', null, '', ['card-bot']);
+    const btnCon =  newEl('div', null, 'btn-con', ['card-btns']);
     btnCon.dataset.id = item.getId();
 
     const fig = newEl('figure', null, '', ['img-con']);
@@ -41,8 +41,8 @@ const itemCard = (item) => {
     const cartCount =  newEl('span', 0, 'item-cart-count', ['cart-qty', 'no-display']);
 
 
-    const addBtn = newEl('button', null, 'cart-increment',  ['btn']);
-    const subBtn = newEl('button', null, 'cart-decrement', ['btn', 'no-display']);
+    const addBtn = newEl('button', null, 'cart-increment',  ['btn', 'single']);
+    const subBtn = newEl('button', null, 'cart-decrement', ['btn', 'no-display', 'small']);
 
         addBtn.addEventListener('click', () => {
             const res = cart.addItem(item);
@@ -53,7 +53,7 @@ const itemCard = (item) => {
                 updateBtnDisplay(item);
             }
         });
-        addBtn.innerHTML= icons.increment.cart;
+        addBtn.innerHTML= icons.increment.cart + 'Add to Cart';
 
         subBtn.addEventListener('click', () => {
             const res = cart.removeItem(item);
@@ -111,8 +111,8 @@ const cartList = () => {
     resetBtn.addEventListener('click', () => {
 
         const res = cart.emptyCart();
+        toast.queueToast(res.msg, res.success);
         if (res.success){
-            toast.queueToast(res.msg, res.success);
             updateCartList();
             updateCardQty();
             updateBtnDisplay();
@@ -150,7 +150,7 @@ const cartItem = (item, button = false, image = false) => {
 
     let removeBtn = undefined;
     if (button !== false){
-        removeBtn = newEl('button', null, 'remove-item', ['btn']);
+        removeBtn = newEl('button', null, 'remove-item', ['btn', 'small']);
         removeBtn.innerHTML = icons.decrement.remove;
         removeBtn.addEventListener('click',  () => {
             const res = cart.removeAll(item);
@@ -202,7 +202,7 @@ const updateBtnDisplay = (item = null) => {
             btnCon.classList.add('single');
             dec.classList.add('no-display');
             qty.classList.add('no-display');
-            inc.innerHTML = icons.increment.cart;
+            inc.innerHTML = icons.increment.cart + 'Add to Cart';
         });
     }
     const style = item.quantity <= 0 ? 'single' : 'multi';
@@ -217,7 +217,9 @@ const updateBtnDisplay = (item = null) => {
         btnCon.classList.add('single');
         dec.classList.add('no-display');
         qty.classList.add('no-display');
-        inc.innerHTML = icons.increment.cart;
+        inc.classList.remove('small');
+        inc.classList.add('single');
+        inc.innerHTML = icons.increment.cart + 'Add to Cart';
         break;
 
         case 'multi':
@@ -225,6 +227,8 @@ const updateBtnDisplay = (item = null) => {
             btnCon.classList.add('multi');
             dec.classList.remove('no-display');
             qty.classList.remove('no-display');
+            inc.classList.add('small');
+            inc.classList.remove('single');
             inc.innerHTML = icons.increment.plus;
             break;
     }

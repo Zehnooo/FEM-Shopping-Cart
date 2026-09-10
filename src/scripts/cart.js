@@ -4,6 +4,11 @@ export const cart= {
     findItemInCart(item){
         return cart.items.find(i => i.name === item.name) ? cart.items.find(i => i.name === item.name) : undefined;
     },
+    getCartQty(item){
+        const exists = cart.items.find(i => i.name === item.name) || undefined;
+        if (exists === undefined) return 0;
+        return exists.quantity;
+    },
     addItem(item){
         const exists = cart.findItemInCart(item);
         if (exists === undefined){ item.quantity++; cart.items.push(item); }
@@ -23,9 +28,9 @@ export const cart= {
         return { success: true, msg: `Removed 1 ${item.name}` }
     },
     removeAll(item){
-        console.log(cart.items);
         const exists = cart.findItemInCart(item);
         if (exists === undefined){ return { success: false, msg: `${item.name} is not in your cart. Please try again.`} }
+        item.quantity = 0;
         cart.items = cart.items.filter(it => it.name !== item.name);
         cart.setTotal();
         return { success: true, msg: `Removed ${item.name} from cart` }
@@ -41,8 +46,19 @@ export const cart= {
         return cart.items;
     },
     emptyCart(){
+        cart.items.forEach(item => item.quantity = 0);
         cart.items = [];
         cart.setTotal();
         return { success: true, msg: 'Cart emptied...' }
+    },
+    confirmOrder(){
+        const order = {
+            items: cart.getCartList(),
+            total: cart.getTotal(),
+        }
+        if (!order.items.length || order.total === 0) {
+            return { success: false, msg: 'Cart is empty. Please add at least one item.'}
+        }
+        return { success: true, msg: 'Order confirmed!', order }
     }
 }

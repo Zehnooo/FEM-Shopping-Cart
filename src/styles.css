@@ -71,6 +71,14 @@ body, html {
     height: 100%;
 }
 
+#order-confirmation-modal {
+    border-radius: .8rem;
+}
+
+#order-confirmation-modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
 #toast-con {
     position: fixed;
     bottom: 0;
@@ -79,16 +87,13 @@ body, html {
     z-index: 100;
 }
 
-#toast-con.empty {
-    opacity: 0;
-}
-
 .toast {
     border-radius: .6rem;
     padding: .4rem .6rem;
     border: 1px solid #ccc;
     font-weight: 600;
     font-size: 14px;
+    animation: fadeIn .4s ease-in forwards;
 }
 
 .toast.error {
@@ -97,4 +102,13 @@ body, html {
 
 .toast.success {
     background-color: green;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

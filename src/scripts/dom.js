@@ -11,7 +11,6 @@ let device;
 export const initDom = () => {
     device = client.device.getDevice();
     root.append(contentGrid(), toastContainer());
-    console.log(toast.isQueueEmpty());
 }
 
 const contentGrid = () => {
@@ -40,7 +39,7 @@ const itemCard = (item) => {
     const defaultAddBtn = newEl('button', 'Add to Cart', 'add-to-cart', ['default-add', 'btn']);
     defaultAddBtn.addEventListener('click', () => {
         const res = cart.addItem(item);
-        toast.queueToast(res.msg, !res.success ? "error" : "success");
+        toast.queueToast(res.msg, res.success);
         if (res.success) { updateCartList(); }
     });
 
@@ -49,14 +48,14 @@ const itemCard = (item) => {
 
         addBtn.addEventListener('click', () => {
             const res = cart.addItem(item);
-            toast.queueToast(res.msg, !res.success ? "error" : "success");
+            toast.queueToast(res.msg, res.success);
             if (res.success) { updateCartList(); }
         });
         addBtn.innerHTML= icons.increment;
 
         subBtn.addEventListener('click', () => {
             const res = cart.removeItem(item);
-            toast.queueToast(res.msg, !res.success ? "error" : "success");
+            toast.queueToast(res.msg, res.success);
             if (res.success) { updateCartList(); }
         });
         subBtn.innerHTML = icons.decrement;
@@ -106,13 +105,15 @@ const cartList = () => {
     resetBtn.addEventListener('click', () => {
         const res = cart.emptyCart();
         if (res.success){
-            toast.queueToast(res.msg, 'success');
+            toast.queueToast(res.msg, res.success);
             updateCartList();
         }
-
     });
 
-    botCon.append(total, resetBtn);
+    const confirmBtn = newEl('button',  'Confirm Order', 'confirm-order', ['btn']);
+    confirmBtn.addEventListener('click', () => console.log('order confirmed'));
+
+    botCon.append(total, resetBtn, confirmBtn);
     con.append(heading, listCon, botCon);
     return con;
 }
@@ -120,17 +121,19 @@ const cartList = () => {
 const cartItem = (item) => {
     const con = newEl('div');
 
-    const fig = newEl('figure');
-    const img = newEl('img', null, null, ['img', 'thumbnail']);
-    img.src = item.image.thumbnail;
-
     const name = newEl('h3', item.name);
-    const price = newEl('p', `@$${item.price.toFixed(2)}`);
-    const qty = newEl('p', `${item.quantity}`);
+    const price = newEl('p', `@ $${item.price.toFixed(2)}`);
+    const qty = newEl('p', `${item.quantity}x`);
     const total = newEl('p', `$${(item.getTotal(item.quantity)).toFixed(2)}`);
 
-    fig.append(img);
-    con.append(img, name, price, qty, total)
+    const removeBtn = newEl('button', null, 'remove-item', ['btn']);
+    removeBtn.addEventListener('click',  () => {
+        const res = cart.removeAll(item);
+        toast.queueToast(res.msg, res.success);
+        if (res.success) { updateCartList(); }
+    });
+
+    con.append(name, qty, price, total, removeBtn);
     return con;
 }
 
@@ -145,7 +148,6 @@ const updateCartList = () =>  {
 }
 
 const updateCartTotal = () => {
-    console.log(cart.getTotal());
     document.querySelector('#cart-total').textContent = `$${cart.getTotal().toFixed(2)}`;
 }
 

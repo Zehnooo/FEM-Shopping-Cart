@@ -9,17 +9,17 @@ export const toast = {
         let counter;
 
         const queue = document.querySelector('#toast-con');
-        const newMsg = newEl('p', `${msg.txt}`, null, [`${msg.type}`, 'toast']);
+        const newMsg = newEl('p', `${msg.txt}`, null, [`${msg.type}`, 'toast', 'active']);
 
         msg.count > 1 ? counter = newEl('span', ` ${msg.count}x`) : counter = undefined;
-        if (counter !== undefined) { newMsg.append(counter); toast.removeMsg(msg); }
+        if (counter !== undefined) { toast.removeMsg(msg); newMsg.append(counter); }
 
         queue.prepend(newMsg);
-        toast.toggleQueue();
+
         setTimeout(() => {
             newMsg.remove();
             toast.queue = toast.queue.filter(m => m.txt !== msg.txt);
-        }, 3000);
+        }, 4000);
     },
     removeMsg(msg){
         const queue = document.querySelector('#toast-con');
@@ -45,13 +45,4 @@ export const toast = {
         toast.printMsg(exists);
     }
     },
-    toggleQueue(){
-         const queue = document.querySelector('#toast-con');
-         const check = toast.isQueueEmpty();
-         check ? queue.classList.add('empty') : queue.classList.remove('empty');
-    },
-    isQueueEmpty(){
-        return !toast.queue.length;
-    }
-
 }

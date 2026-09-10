@@ -73,24 +73,28 @@ body, html {
 
 #toast-con {
     position: fixed;
-    top: 5%;
+    bottom: 0;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 100;
-    background: #ccc;
-    padding: 12px 24px;
-    border-radius: 8px;
-
 }
 
 #toast-con.empty {
     opacity: 0;
 }
 
+.toast {
+    border-radius: .6rem;
+    padding: .4rem .6rem;
+    border: 1px solid #ccc;
+    font-weight: 600;
+    font-size: 14px;
+}
+
 .toast.error {
-    color: red;
+    background-color: red;
 }
 
 .toast.success {
-    color: green;
+    background-color: green;
 }

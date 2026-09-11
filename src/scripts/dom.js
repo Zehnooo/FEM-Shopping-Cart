@@ -101,16 +101,22 @@ const itemGrid = (items) => {
 }
 
 const cartList = () => {
-    const con = newEl('div', null, 'cart-list-con', []);
+    const con = newEl('div', null, null, ['grid-right']);
+    const cartCon = newEl('div', null, 'cart-list-con',  []);
     const listCon = newEl('div', null,  'cart-list', []);
     const botCon = newEl('div', null, 'cart-bottom', []);
 
     const heading = newEl('h2', 'Your cart');
     const cartCount = newEl('span', ` (${cart.getCartQty()})`, 'cart-qty-total');
 
-    const total = newEl('h3', `$${cart.getTotal().toFixed(2)}`, 'cart-total',[]);
+    const total = newEl('h3', `$${cart.getTotal().toFixed(2)}`, 'cart-total',['no-display']);
 
-    const resetBtn = newEl('button', 'Empty Cart', 'empty-cart', ['btn']);
+    const emptyCon = newEl('div', null, null, ['cart-placeholder']);
+    const emptyImg = newEl('svg', null, null,  []);
+    emptyImg.innerHTML = icons.empty;
+    const emptyMsg = newEl('p', 'Your added items will appear here', null, ['txt-sml']);
+
+    const resetBtn = newEl('button', 'Empty Cart', 'empty-cart', ['btn', 'no-display']);
     resetBtn.addEventListener('click', () => {
 
         const res = cart.emptyCart();
@@ -123,26 +129,34 @@ const cartList = () => {
         }
     });
 
-    const confirmBtn = newEl('button',  'Confirm Order', 'confirm-order', ['btn']);
+    const confirmBtn = newEl('button',  'Confirm Order', 'confirm-order', ['btn', 'no-display']);
     confirmBtn.addEventListener('click', () => {
         const res = cart.confirmOrder();
         toast.queueToast(res.msg, res.success);
-        if (res.success){ const modal = orderConfirmationModal(res.order); root.append(modal); modal.showModal();  }
+        if (res.success){
+            const modal = orderConfirmationModal(res.order);
+            root.append(modal);
+            modal.showModal();
+        }
     });
 
     heading.append(cartCount);
+    emptyCon.append(emptyImg, emptyMsg);
     botCon.append(total, resetBtn, confirmBtn);
-    con.append(heading, listCon, botCon);
+    cartCon.append(heading, emptyCon, listCon, botCon);
+    con.append(cartCon);
     return con;
 }
 
 const cartItem = (item, button = false, image = false) => {
-    const con = newEl('div');
+    const con = newEl('div', null, '', ['cart-item']);
+    const itemCon = newEl('div',  null, '', []);
+    const infoCon = newEl('div', null, '', ['cart-item-info']);
 
-    const name = newEl('h3', item.name);
-    const price = newEl('p', `@ $${item.price.toFixed(2)}`);
-    const qty = newEl('p', `${item.quantity}x`);
-    const total = newEl('p', `$${(item.getTotal(item.quantity)).toFixed(2)}`);
+    const name = newEl('h2', item.name, '', ['cart-item-name', 'txt-med']);
+    const price = newEl('p', `@ $${item.price.toFixed(2)}`, '', ['cart-item-price', 'txt-med']);
+    const qty = newEl('p', `${item.quantity}x`, '', ['cart-item-qty', 'txt-med']);
+    const total = newEl('p', `$${(item.getTotal(item.quantity)).toFixed(2)}`, '', ['cart-item-total', 'txt-med']);
 
     let fig = undefined;
     let img;
@@ -155,7 +169,7 @@ const cartItem = (item, button = false, image = false) => {
 
     let removeBtn = undefined;
     if (button !== false){
-        removeBtn = newEl('button', null, 'remove-item', ['btn', 'small']);
+        removeBtn = newEl('button', null, 'remove-item', ['btn', 'small', 'remove']);
         removeBtn.innerHTML = icons.decrement.remove;
         removeBtn.addEventListener('click',  () => {
             const res = cart.removeAll(item);
@@ -169,7 +183,9 @@ const cartItem = (item, button = false, image = false) => {
         });
     }
 
-    con.append(name, qty, price, total);
+    infoCon.append(qty, price, total);
+    itemCon.append(name, infoCon);
+    con.append(itemCon);
     if (removeBtn !== undefined) { con.append(removeBtn); }
     if (fig !== undefined) { con.prepend(fig); }
     return con;

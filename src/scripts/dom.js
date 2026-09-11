@@ -248,7 +248,6 @@ const updateBtnDisplay = (item = null) => {
 }
 
 const updateActiveStatus = (item = null) => {
-    console.log(item);
     if (item  !== null){
         const activeQty = cart.getItemQty(item);
         const selector = item.name.replaceAll(' ', '-') + '-img'
@@ -256,9 +255,7 @@ const updateActiveStatus = (item = null) => {
         activeQty <= 0 ? img.classList.remove('active') : img.classList.add('active');
         return;
     }
-    const imgs = document.querySelectorAll('.item-img');
-    console.log(imgs);
-    imgs.forEach(img => img.classList.remove('active'));
+    document.querySelectorAll('.item-img').forEach(img => img.classList.remove('active'));
 }
 
 const orderConfirmationModal = (order) => {

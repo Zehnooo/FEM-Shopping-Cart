@@ -4,7 +4,7 @@ export const cart= {
     findItemInCart(item){
         return cart.items.find(i => i.name === item.name) ? cart.items.find(i => i.name === item.name) : undefined;
     },
-    getCartQty(item){
+    getItemQty(item){
         const exists = cart.items.find(i => i.name === item.name) || undefined;
         if (exists === undefined) return 0;
         return exists.quantity;
@@ -44,6 +44,9 @@ export const cart= {
     },
     getCartList(){
         return cart.items;
+    },
+    getCartQty(){
+        return cart.items.reduce((acc, item) => { return acc + item.quantity }, 0);
     },
     emptyCart(){
         if (!cart.items.length) return { success: false, msg: 'Cart is already empty' }

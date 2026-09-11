@@ -35,7 +35,7 @@ const itemCard = (item) => {
     btnCon.dataset.id = item.getId();
 
     const fig = newEl('figure', null, '', ['img-con']);
-    const img = newEl('img', null, `${item.name}-img`, ['item-img']);
+    const img = newEl('img', null, `${item.name.replaceAll(' ', '-')}-img`, ['item-img']);
     img.src = item.image[device];
 
     const cartCount =  newEl('span', 0, 'item-cart-count', ['cart-qty', 'no-display']);
@@ -51,6 +51,7 @@ const itemCard = (item) => {
                 updateCartList();
                 updateCardQty(item);
                 updateBtnDisplay(item);
+                updateActiveStatus(item);
             }
         });
         addBtn.innerHTML= icons.increment.cart + 'Add to Cart';
@@ -62,14 +63,15 @@ const itemCard = (item) => {
                 updateCartList();
                 updateCardQty(item);
                 updateBtnDisplay(item);
+                updateActiveStatus(item);
             }
         });
         subBtn.innerHTML = icons.decrement.minus;
 
 
-    const category = newEl('p', item.category);
-    const name = newEl('h4', item.name);
-    const price = newEl('p', `$${item.price.toFixed(2)}`);
+    const category = newEl('p', item.category, null, ['item-category']);
+    const name = newEl('h4', item.name, null, ['item-name']);
+    const price = newEl('p', `$${item.price.toFixed(2)}`, null, ['item-price']);
 
     fig.append(img);
     btnCon.append(subBtn, cartCount, addBtn);
@@ -82,7 +84,7 @@ const itemCard = (item) => {
 
 const dessertList = (items) => {
     const con = newEl('div', null, 'dessert-con');
-    const heading = newEl('h2', 'Desserts', null, []);
+    const heading = newEl('h1', 'Desserts', null, []);
 
     const itemList = itemGrid(items);
 
@@ -104,6 +106,7 @@ const cartList = () => {
     const botCon = newEl('div', null, 'cart-bottom', []);
 
     const heading = newEl('h2', 'Your cart');
+    const cartCount = newEl('span', ` (${cart.getCartQty()})`, 'cart-qty-total');
 
     const total = newEl('h3', `$${cart.getTotal().toFixed(2)}`, 'cart-total',[]);
 
@@ -116,6 +119,7 @@ const cartList = () => {
             updateCartList();
             updateCardQty();
             updateBtnDisplay();
+            updateActiveStatus();
         }
     });
 
@@ -126,6 +130,7 @@ const cartList = () => {
         if (res.success){ const modal = orderConfirmationModal(res.order); root.append(modal); modal.showModal();  }
     });
 
+    heading.append(cartCount);
     botCon.append(total, resetBtn, confirmBtn);
     con.append(heading, listCon, botCon);
     return con;
@@ -159,6 +164,7 @@ const cartItem = (item, button = false, image = false) => {
                 updateCartList();
                 updateCardQty(item);
                 updateBtnDisplay(item);
+                updateActiveStatus(item);
             }
         });
     }
@@ -177,17 +183,20 @@ const updateCartList = () =>  {
 
     if (items.length > 0) {items.forEach(item => list.append(cartItem(item, true)));}
     updateCartTotal();
+    updateCartQty();
 }
 
 const updateCartTotal = () => {
     document.querySelector('#cart-total').textContent = `$${cart.getTotal().toFixed(2)}`;
 }
 
+const updateCartQty = () => { document.querySelector('#cart-qty-total').textContent = ` (${cart.getCartQty()})`}
+
 const updateCardQty = (item = null) => {
     if (!item){
         document.querySelectorAll('#item-cart-count').forEach(el => el.textContent = String(0));
     } else {
-        document.querySelector(`[data-id='${item.id}']`).querySelector('#item-cart-count').textContent = String(cart.getCartQty(item));
+        document.querySelector(`[data-id='${item.id}']`).querySelector('#item-cart-count').textContent = String(cart.getItemQty(item));
     }
 }
 
@@ -203,7 +212,10 @@ const updateBtnDisplay = (item = null) => {
             dec.classList.add('no-display');
             qty.classList.add('no-display');
             inc.innerHTML = icons.increment.cart + 'Add to Cart';
+            inc.classList.remove('small');
+            inc.classList.add('single');
         });
+        return;
     }
     const style = item.quantity <= 0 ? 'single' : 'multi';
     const btnCon = document.querySelector(`[data-id='${item.id}']`);
@@ -233,6 +245,20 @@ const updateBtnDisplay = (item = null) => {
             break;
     }
 
+}
+
+const updateActiveStatus = (item = null) => {
+    console.log(item);
+    if (item  !== null){
+        const activeQty = cart.getItemQty(item);
+        const selector = item.name.replaceAll(' ', '-') + '-img'
+        const img = document.querySelector(`#${selector}`);
+        activeQty <= 0 ? img.classList.remove('active') : img.classList.add('active');
+        return;
+    }
+    const imgs = document.querySelectorAll('.item-img');
+    console.log(imgs);
+    imgs.forEach(img => img.classList.remove('active'));
 }
 
 const orderConfirmationModal = (order) => {

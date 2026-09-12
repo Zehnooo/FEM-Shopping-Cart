@@ -172,7 +172,6 @@ export const cartItem = (item, button = false, image = false) => {
     if (image !== false){
         fig = newEl('figure');
         img = newEl('img', null, null, ['img', 'thumbnail']);
-        console.log('test', { test: image, item});
         img.src = item.image.thumbnail;
         fig.append(img);
     }

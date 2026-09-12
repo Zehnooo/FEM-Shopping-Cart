@@ -291,9 +291,7 @@ body, html {
     align-self: flex-start;
 }
 
-.cart-item .cart-item-info > p {
-    margin: 0;
-}
+.cart-item .cart-item-info > p { margin: 0; }
 
 #cart-bottom {
     display: flex;

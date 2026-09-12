@@ -127,7 +127,7 @@ body, html {
     margin: 0;
 }
 
-.item-card .item-img {
+.item-img {
     width: 100%;
     height: 100%;
     display: block;
@@ -210,6 +210,7 @@ body, html {
 .btn.chng-qty:not(.single):hover, .confirm:hover { background: var(--rose-50) !important; color: var(--red) !important; }
 .btn.chng-qty:not(.single):hover svg { color: var(--red); }
 .cart-btn.empty:hover { background: var(--red); color: var(--rose-50); }
+.btn.new-order { width: 100%; }
 
 #cart-increment.single {
     background: var(--rose-50);
@@ -308,10 +309,26 @@ body, html {
 
 #order-confirmation-modal {
     border-radius: .8rem;
+    width: 25%;
+    max-height: 75%;
 }
 
 #order-confirmation-modal::backdrop {
     background-color: rgba(0, 0, 0, 0.7);
+}
+
+#order-confirmation-modal .cart-item {
+    max-height: 4rem;
+}
+
+#order-confirmation-modal .cart-item > figure {
+    max-width: 48px;
+    margin: 0;
+}
+
+#order-confirmation-modal .cart-item > figure img {
+    width: 100%;
+    height: 100%;
 }
 
 #toast-con {

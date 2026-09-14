@@ -191,22 +191,29 @@ export const cartItem = (item, button = false, image = false, confirmation = fal
     }
 
     if (confirmation !== false){
-        infoCon.append(name, qty, price);
-        con.append(infoCon, total);
+        const c = newEl('div')
+        c.append(qty, price);
+        infoCon.append(name, c);
+        if (fig !== undefined) { itemCon.prepend(fig); }
+        itemCon.append(infoCon);
+        con.append(itemCon, total);
+        itemCon.classList.add('confirmed-item');
     } else {
         infoCon.append(qty, price, total);
         itemCon.append(name, infoCon);
         con.append(itemCon);
+        if (fig !== undefined) {
+            con.prepend(fig);
+        }
     }
-
     if (removeBtn !== undefined) { con.append(removeBtn); }
-    if (fig !== undefined) { con.prepend(fig); }
     return con;
 }
 
 
 const orderConfirmationModal = (order) => {
-    const m = newEl('dialog', null, 'order-confirmation-modal');
+    const device = client.device.getDevice();
+    const m = newEl('dialog', null, 'order-confirmation-modal', [`modal-${device}`]);
     const con = newEl('div');
     m.addEventListener('close', (e) => {
         m.remove();
@@ -214,7 +221,7 @@ const orderConfirmationModal = (order) => {
 
     const close = newEl('button', null, 'close-modal', ['btn']);
     close.innerHTML = icons.close;
-    close.addEventListener('click', () => { m.close(); m.remove(); })
+    close.addEventListener('click', () => { m.close(); m.remove(); });
 
     const confirm = newEl('svg');
     confirm.innerHTML = icons.confirm;
@@ -237,7 +244,7 @@ const orderConfirmationModal = (order) => {
     });
 
     const totalText = newEl('p', 'Order Total', null, []);
-    const orderTotal = newEl('h4', `$${order.total.toFixed(2)}`);
+    const orderTotal = newEl('h2', `$${order.total.toFixed(2)}`);
 
     totalCon.append(totalText, orderTotal);
     orderCon.append(itemList, totalCon);

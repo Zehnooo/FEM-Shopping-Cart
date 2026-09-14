@@ -157,7 +157,7 @@ const cartList = () => {
     return con;
 }
 
-export const cartItem = (item, button = false, image = false) => {
+export const cartItem = (item, button = false, image = false, confirmation = false) => {
     const con = newEl('div', null, null, ['cart-item']);
     const itemCon = newEl('div',  null, null, []);
     const infoCon = newEl('div', null, null, ['cart-item-info']);
@@ -190,9 +190,15 @@ export const cartItem = (item, button = false, image = false) => {
         });
     }
 
-    infoCon.append(qty, price, total);
-    itemCon.append(name, infoCon);
-    con.append(itemCon);
+    if (confirmation !== false){
+        infoCon.append(name, qty, price);
+        con.append(infoCon, total);
+    } else {
+        infoCon.append(qty, price, total);
+        itemCon.append(name, infoCon);
+        con.append(itemCon);
+    }
+
     if (removeBtn !== undefined) { con.append(removeBtn); }
     if (fig !== undefined) { con.prepend(fig); }
     return con;
@@ -201,6 +207,14 @@ export const cartItem = (item, button = false, image = false) => {
 
 const orderConfirmationModal = (order) => {
     const m = newEl('dialog', null, 'order-confirmation-modal');
+    const con = newEl('div');
+    m.addEventListener('close', (e) => {
+        m.remove();
+    });
+
+    const close = newEl('button', null, 'close-modal', ['btn']);
+    close.innerHTML = icons.close;
+    close.addEventListener('click', () => { m.close(); m.remove(); })
 
     const confirm = newEl('svg');
     confirm.innerHTML = icons.confirm;
@@ -208,11 +222,11 @@ const orderConfirmationModal = (order) => {
     const heading = newEl('h2', 'Order Confirmed');
     const text = newEl('p', 'We hope you enjoy your food!');
 
-    const orderCon = newEl('div');
+    const orderCon = newEl('div', null, null, ['confirm-list']);
     const itemList = newEl('div');
     const totalCon = newEl('div', null, null, ['total-con']);
 
-    order.items.forEach(item => { itemList.append(cartItem(item, false, true)); });
+    order.items.forEach(item => { itemList.append(cartItem(item, false, true, true)); });
 
     const newOrderBtn = newEl('button', 'Start New Order', 'new-order', ['btn', 'confirm', 'txt-med', 'cart-btn', 'new-order']);
     newOrderBtn.addEventListener('click', () => {
@@ -227,6 +241,7 @@ const orderConfirmationModal = (order) => {
 
     totalCon.append(totalText, orderTotal);
     orderCon.append(itemList, totalCon);
-    m.append(confirm, heading, text, orderCon, newOrderBtn);
+    con.append(close, confirm, heading, text, orderCon, newOrderBtn);
+    m.append(con);
     return m;
 }

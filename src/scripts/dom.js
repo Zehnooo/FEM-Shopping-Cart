@@ -215,14 +215,14 @@ const orderConfirmationModal = (order) => {
     const device = client.device.getDevice();
     const m = newEl('dialog', null, 'order-confirmation-modal', [`modal-${device}`]);
     const con = newEl('div');
-    m.addEventListener('close', (e) => {
-        m.remove();
-    });
+    m.addEventListener('close', () => { setTimeout(() => { m.remove(); }, 2000); });
 
     const close = newEl('button', null, 'close-modal', ['btn']);
     close.innerHTML = icons.close;
-    close.addEventListener('click', () => { m.close(); m.remove(); });
-
+    close.addEventListener('click', () => {
+        m.close();
+        setTimeout(() => { m.remove(); }, 2000);
+    });
     const confirm = newEl('svg');
     confirm.innerHTML = icons.confirm;
 
